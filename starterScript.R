@@ -1,7 +1,7 @@
 
 getwd()
 
-cstats <- read.csv("data/covid-19-20200630.csv")
+cstats <- read.csv("data/covid-19-20200714.csv")
 
 head(cstats)
 
@@ -82,7 +82,7 @@ print(posTestRateOrder, row.names=FALSE)
 
 
 # import daily csv file
-c19stats <- read.csv("data/daily-20200707.csv")
+c19stats <- read.csv("data/covid-19-20200714.csv")
 
 # extract most recent day
 dayResults <- c19stats[c19stats$date == max(c19stats$date),]
@@ -107,4 +107,32 @@ print(posTestRateOrder, row.names=FALSE)
 # print sorted results - descending positive rate
 print(posTestRate[order(-posTestRate$pctPosRate),], row.names=FALSE)
 
+sum(posTestRate$posDayTest)
                           
+
+# extract most recent day
+mnResults <- c19stats[c19stats$state == 'MN',]
+
+# build data frame with select columns
+mnTestRate <- data.frame(
+  date = mnResults$date, 
+  state = mnResults$state, 
+  posDayTest = mnResults$positiveIncrease, 
+  totDayTest = mnResults$totalTestResultsIncrease)
+
+# Add percentage column 
+mnTestRate$pctPosRate <- round((mnResults$positiveIncrease / mnResults$totalTestResultsIncrease) * 100, digits = 2)
+
+
+# sort results
+mnTestRateOrder <- mnTestRate[order(-mnTestRate$date),]
+
+mnTestRateOrder <- mnTestRate[order(-mnTestRate$pctPosRate),]
+
+# print results
+print(mnTestRateOrder, row.names=FALSE)
+
+
+# print sorted results - descending positive rate
+print(posTestRate[order(-posTestRate$pctPosRate),], row.names=FALSE)
+
